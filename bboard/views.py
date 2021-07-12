@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormView, UpdateView, CreateView, DeleteView
-from django.views.generic.dates import ArchiveIndexView
+from django.views.generic.dates import ArchiveIndexView, DateDetailView, MonthArchiveView
 from django.template import loader
 from django.shortcuts import render
 from .forms import BbForm
@@ -96,6 +96,20 @@ class BbIndexView(ArchiveIndexView):
     context_object_name = 'bbs'
     allow_empty = True
     def get__context_data (self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['rubrics'] = Rubric.objects.all()
+        return context
+
+class BbMonthArchiveView(MonthArchiveView):
+    model = Bb
+    date_field = "published"
+    month_format = '%m'
+
+class BbDetailView(DateDetailView):
+    model = Bb
+    date_field = 'published'
+    month_format = '%m'
+    def get_context_data(self, *args, **kwargs) :
         context = super().get_context_data(*args, **kwargs)
         context['rubrics'] = Rubric.objects.all()
         return context
