@@ -3,6 +3,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormView, UpdateView, CreateView, DeleteView
 from django.views.generic.dates import ArchiveIndexView, DateDetailView, MonthArchiveView
+from django.views.generic.base import RedirectView
 from django.template import loader
 from django.shortcuts import render
 from .forms import BbForm
@@ -113,6 +114,9 @@ class BbDetailView(DateDetailView):
         context = super().get_context_data(*args, **kwargs)
         context['rubrics'] = Rubric.objects.all()
         return context
+
+class BbRedirectView(RedirectView) :
+    url = '/detail/%(pk)d/'
 
  
 
